@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  test:
+    name: test ${{matrix.otp}} on ${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    container:
+      image: erlang:${{matrix.otp}}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        otp:
+          - "28"
+          - "27"
+          - "26"
+          - "25"
+    steps:
+      - uses: actions/checkout@v5
+      - run: make
+      - run: make unit_tests
+ 
